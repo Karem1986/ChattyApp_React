@@ -7,10 +7,20 @@ import {
   gql,
   useMutation,
 } from "@apollo/client";
+//Updates for messages in real time with Subscriptions: Apollo link
+import { WebSocketLink } from "@apollo/client/link/ws";
 //UI
 import { Container, Row, Col, FormInput, Button } from "shards-react";
 
+const link = new WebSocketLink({
+  uri: `ws://localhost:4000/`,
+  options: {
+    reconnect: true,
+  },
+});
+
 const client = new ApolloClient({
+  link,
   uri: "http://localhost:4000/",
   cache: new InMemoryCache(),
 });
@@ -25,9 +35,9 @@ const GET_MESSAGES = gql`
   }
 `;
 const POST_MESSAGE = gql`
-mutation($user: String!, $content: String!) {
-  createMessage(user:$user, content:$content) 
-}
+  mutation($user: String!, $content: String!) {
+    createMessage(user: $user, content: $content)
+  }
 `;
 const Messages = ({ user }) => {
   const { data } = useQuery(GET_MESSAGES, {
@@ -83,7 +93,7 @@ const Messages = ({ user }) => {
 
 const Chat = () => {
   const [state, stateSet] = React.useState({
-    user: 'Karem',
+    user: "Karem",
     content: "",
   });
   const [postMessage] = useMutation(POST_MESSAGE);

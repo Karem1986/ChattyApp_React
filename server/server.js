@@ -17,6 +17,9 @@ type Query {
 type Mutation {
   createMessage(user: String!, content: String!): ID!
 }
+type Subscription {
+  messages: [Message!]
+}
 
 `;
 const resolvers = {

@@ -25,6 +25,7 @@ type Subscription {
 
 const subscribers = []
 const onMessageUpdates = (fk) => subscribers.push(fk)
+
 const resolvers = {
   Query: {
     messages: () => messages,
